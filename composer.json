@@ -1,0 +1,54 @@
+{
+    "name": "jdolba/slim-http-smoke-testing",
+    "type": "library",
+    "description": "HTTP Smoke Testing for your Slim Framework based application",
+    "keywords": [
+        "jdolba",
+        "slim-http-smoke-testing",
+        "Slim",
+        "Slim Framework"
+    ],
+    "homepage": "https://github.com/jdolba/slim-http-smoke-testing",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jakub Dolba",
+            "email": "jakub@dolba.cz",
+            "homepage": "https://github.com/jDolba",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : "~7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : ">=7.0",
+        "squizlabs/php_codesniffer": "^3.0",
+        "phpstan/phpstan": "^0.10",
+        "phpstan/phpstan-phpunit": "^0.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "JDolba\\SlimHttpSmokeTesting\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\JDolba\\SlimHttpSmokeTesting\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "check-style": "phpcs src tests",
+        "fix-style": "phpcbf src tests",
+        "check-phpstan": "phpstan analyse src tests -l 7"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

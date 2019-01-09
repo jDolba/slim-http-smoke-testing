@@ -1,4 +1,4 @@
-# slim-http-smoke-testing
+# Slim framework HTTP Smoke testing
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -7,38 +7,68 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Note:** Replace ```Jakub Dolba``` ```jDolba``` ```https://github.com/jDolba``` ```jakub@dolba.cz``` ```jdolba``` ```slim-http-smoke-testing``` ```HTTP Smoke Testing of your Slim Framework based application``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can run `$ php prefill.php` in the command line to make all replacements at once. Delete the file prefill.php as well.
+This simple package will load ALL your routes from `Slim\App` and make
+a Request on them to receive Response to assert expected return http code.
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
+It is not very smart or bullet-proof check, but it
+will simply tell you: *does it run?*.
 
-## Structure
+After initial configuration it is almost maintenance-free as it checks any new
+routes automatically.
 
-If any of the following are applicable to your project, then the directory structure should follow industry best practices by being named the following.
-
-```
-bin/        
-config/
-src/
-tests/
-vendor/
-```
-
+Inspired by
+[shopsys/http-smoke-testing](https://github.com/shopsys/http-smoke-testing)
+THANK YOU!
 
 ## Install
 
 Via Composer
 
 ``` bash
-$ composer require jdolba/slim-http-smoke-testing
+composer require --dev jdolba/slim-http-smoke-testing
 ```
+
+This package internally uses PHPUnit to run the tests.
+That means that you need to setup your phpunit.xml properly.
+
+### WARNING
+***`Because this package will make a real Request`***
+***`be sure you are NOT executing this test on production db!`***
+
 
 ## Usage
 
-``` php
-$skeleton = new JDolba\SlimHttpSmokeTesting();
-echo $skeleton->echoPhrase('Hello, League!');
+Create new PHPUnit test extending
+`\JDolba\SlimHttpSmokeTesting\SlimApplicationHttpSmokeTestCase`
+class and implement `setUpSmokeTestAndCallConfigure` and `customize` methods.
+
+You can run your new test by:
+
+``` bash
+php vendor/bin/phpunit tests/Smoke/MyAwesomeApplicationSmokeTest.php
 ```
+
+[See example test class](example/tests/MyAwesomeApplicationSmokeTest.php)
+
+### About RequestDataSet
+
+Each your route uri + acceptable http method is represented as
+`\JDolba\SlimHttpSmokeTesting\RequestDataSet`
+so for example
+```
+$app = new \Slim\App();
+$app->any('/', function ($request, $response, $args) {
+//...
+return $response;
+});
+```
+will be interpreted as 6 independent DataSets, because Slim is using for "any":
+
+`['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']`
+
+you can customize passed `$request` in your test class using `customize` method.
+This 6 data sets will have routeName `'/'`, but
+
 
 ## Change log
 

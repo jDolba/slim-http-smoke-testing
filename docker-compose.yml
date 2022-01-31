@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+    php:
+        tty: true
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: base
+        container_name: php
+        volumes:
+            - .:/var/www/html

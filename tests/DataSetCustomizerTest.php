@@ -14,7 +14,7 @@ class DataSetCustomizerTest extends TestCase
      *
      * @param \JDolba\SlimHttpSmokeTesting\RequestDataSet[] $dataSets
      */
-    public function testCustomizeCallback(array $dataSets)
+    public function testCustomizeCallback(array $dataSets): void
     {
         $customizer = new DataSetCustomizer($dataSets);
 
@@ -28,7 +28,10 @@ class DataSetCustomizerTest extends TestCase
         }
     }
 
-    public function customizeDataProvider()
+    /**
+     * @return \JDolba\SlimHttpSmokeTesting\RequestDataSet[][][]
+     */
+    public function customizeDataProvider(): array
     {
         $routeConfigMock = $this->createMock(SlimRouteConfiguration::class);
 
@@ -48,7 +51,7 @@ class DataSetCustomizerTest extends TestCase
      *
      * @param \JDolba\SlimHttpSmokeTesting\RequestDataSet[] $dataSets
      */
-    public function testCustomizeByConditionCallback(array $dataSets)
+    public function testCustomizeByConditionCallback(array $dataSets): void
     {
         $customizer = new DataSetCustomizer($dataSets);
 
@@ -74,7 +77,10 @@ class DataSetCustomizerTest extends TestCase
         }
     }
 
-    public function customizeByConditionCallbackDataProvider()
+    /**
+     * @return \JDolba\SlimHttpSmokeTesting\RequestDataSet[][][]
+     */
+    public function customizeByConditionCallbackDataProvider(): array
     {
         $routes = [
             '/v1/user',

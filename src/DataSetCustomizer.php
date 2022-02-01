@@ -11,6 +11,9 @@ class DataSetCustomizer
      */
     private $dataSets;
 
+    /**
+     * @param \JDolba\SlimHttpSmokeTesting\RequestDataSet[] $dataSets
+     */
     public function __construct(array $dataSets)
     {
         $this->dataSets = $dataSets;

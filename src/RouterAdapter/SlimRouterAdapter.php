@@ -37,8 +37,8 @@ class SlimRouterAdapter implements RouterAdapterInterface
 
     /**
      * @param \JDolba\SlimHttpSmokeTesting\RouteConfiguration\RouteConfigurationInterface $routeConfiguration
-     * @param string[] $uriParams params passed to generate URI part; keys are name of params in URI
-     * @param string[] $queryParams not mandatory query parts (to be used like ?foo=bar)
+     * @param array<string, int> $uriParams params passed to generate URI part; keys are name of params in URI
+     * @param array<string, int> $queryParams not mandatory query parts (to be used like ?foo=bar)
      * @return string
      */
     public function generateRelativePath(

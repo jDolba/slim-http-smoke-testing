@@ -31,12 +31,12 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
     /**
      * @param \JDolba\SlimHttpSmokeTesting\Configuration $smokeConfiguration
      */
-    final public static function configure(Configuration $smokeConfiguration)
+    final public static function configure(Configuration $smokeConfiguration): void
     {
         self::$configuration = $smokeConfiguration;
     }
 
-    private function throwNotConfiguredException()
+    private function throwNotConfiguredException(): void
     {
         throw new \LogicException(
             sprintf(
@@ -47,9 +47,9 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
     }
 
     /**
-     * @return \JDolba\SlimHttpSmokeTesting\RouteConfiguration\RouteConfigurationInterface[][]
+     * @return array<array<\Psr\Http\Message\RequestInterface|\JDolba\SlimHttpSmokeTesting\RequestDataSet>>
      */
-    final public function httpResponseDataProvider()
+    final public function httpResponseDataProvider(): array
     {
         static::setUpSmokeTestAndCallConfigure();
 
@@ -91,6 +91,7 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
                     );
                 }
 
+                /** @var \Slim\Http\Request $request */
                 $request = $requestPromise(self::$configuration->getRouterAdapter(), $dataSet);
                 if (!$request instanceof RequestInterface) {
                     throw new \LogicException(sprintf(
@@ -132,7 +133,7 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
      * @param \Psr\Http\Message\RequestInterface $request
      * @param \JDolba\SlimHttpSmokeTesting\RequestDataSet $requestDataSet
      */
-    final public function testHttpResponse(RequestInterface $request, RequestDataSet $requestDataSet)
+    final public function testHttpResponse(RequestInterface $request, RequestDataSet $requestDataSet): void
     {
         if (self::$configuration === null) {
             $this->throwNotConfiguredException();
@@ -147,7 +148,6 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
                     ($requestDataSet->getSkippedReason() ?: 'Reason not provided')
                 )
             );
-            return;
         }
 
         $response = $this->handleRequest($request);
@@ -166,7 +166,9 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
     protected function handleRequest(RequestInterface $request)
     {
         $application = self::$configuration->getApp();
-        $application->getContainer()['request'] = $request;
+        /** @var \Slim\Container $container */
+        $container = $application->getContainer();
+        $container->offsetSet('request', $request);
         return $application->run(true);
     }
 
@@ -179,7 +181,7 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
         ResponseInterface $response,
         RequestInterface $request,
         RequestDataSet $requestDataSet
-    ) {
+    ): void {
         $failureMessage = sprintf(
             'Response code %d for route %s is not identical to expected %d',
             $response->getStatusCode(),

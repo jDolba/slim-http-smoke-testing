@@ -33,11 +33,11 @@ class RequestDataSet
      */
     private $skippedReason;
     /**
-     * @var string[]
+     * @var array<string, int>
      */
     private $uriParamsForRouter = [];
     /**
-     * @var string[]
+     * @var array<string, int>
      */
     private $queryParamsForRouter = [];
     /**
@@ -61,7 +61,7 @@ class RequestDataSet
         $this->requestPromise = $this->createDefaultRequestPromise();
     }
 
-    public function createDefaultRequestPromise()
+    public function createDefaultRequestPromise(): \Closure
     {
         return function (RouterAdapterInterface $routerAdapter, RequestDataSet $requestDataSet) {
             $uri = $routerAdapter->generateRelativePath(
@@ -89,22 +89,34 @@ class RequestDataSet
         return $this->method;
     }
 
+    /**
+     * @return array<string, int>
+     */
     public function getUriParamsForRouter(): array
     {
         return $this->uriParamsForRouter;
     }
 
-    public function setUriParamsForRouter(array $uriParams)
+    /**
+     * @param array<string, int> $uriParams
+     */
+    public function setUriParamsForRouter(array $uriParams): void
     {
         $this->uriParamsForRouter = $uriParams;
     }
 
+    /**
+     * @return array<string, int>
+     */
     public function getQueryParamsForRouter(): array
     {
         return $this->queryParamsForRouter;
     }
 
-    public function setQueryParamsForRouter(array $queryParams)
+    /**
+     * @param array<string, int> $queryParams
+     */
+    public function setQueryParamsForRouter(array $queryParams): void
     {
         $this->queryParamsForRouter = $queryParams;
     }
@@ -125,24 +137,18 @@ class RequestDataSet
         return $this->expectedHttpCode;
     }
 
-    /**
-     * @param int $code
-     */
-    public function setExpectedHttpCode(int $code)
+    public function setExpectedHttpCode(int $code): void
     {
         $this->expectedHttpCode = $code;
     }
 
-    /**
-     * @param string|null $why
-     */
-    public function skip(string $why = null)
+    public function skip(?string $why = null): void
     {
         $this->skipped = true;
         $this->skippedReason = $why;
     }
 
-    public function asNotSkipped()
+    public function asNotSkipped(): void
     {
         $this->skipped = false;
         $this->skippedReason = null;
@@ -173,7 +179,7 @@ class RequestDataSet
      *
      * @param callable $callable
      */
-    public function setRequestPromise(callable $callable)
+    public function setRequestPromise(callable $callable): void
     {
         $this->requestPromise = $callable;
     }
@@ -215,7 +221,7 @@ class RequestDataSet
      *
      * @param callable $callable
      */
-    public function setAuthenticationCallback(callable $callable)
+    public function setAuthenticationCallback(callable $callable): void
     {
         $this->authenticationCallable = $callable;
     }

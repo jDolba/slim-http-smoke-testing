@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace JDolba\SlimHttpSmokeTesting;
 
 use PHPUnit\Framework\TestCase;
+use Pimple\Container;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -166,9 +168,24 @@ abstract class SlimApplicationHttpSmokeTestCase extends TestCase
     protected function handleRequest(RequestInterface $request)
     {
         $application = self::$configuration->getApp();
-        /** @var \Slim\Container $container */
         $container = $application->getContainer();
-        $container->offsetSet('request', $request);
+
+        if (method_exists($container, 'set')) {
+            /**
+             * @see https://php-di.org/
+             * @see \DI\Container
+             */
+            $container->set('request', $request);
+        } elseif (method_exists($container, 'offsetSet')) {
+            /**
+             * default Slim3 Container implementation
+             * @see \Pimple\Container
+             */
+            $container->offsetSet('request', $request);
+        } else {
+            throw new \LogicException('Unsupported Container method. Your Container implementation does not support "set"');
+        }
+
         return $application->run(true);
     }
 
